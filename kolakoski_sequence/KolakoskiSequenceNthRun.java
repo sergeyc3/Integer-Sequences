@@ -3,17 +3,17 @@ package kolakoski_sequence;
 import java.util.LinkedList;
 import java.util.List;
 
-public class KolakoskiSequence {
+public class KolakoskiSequenceNthRun {
     
     /**
      * @param n: represents the number of "runs" or "blocks"
      * input "n" is limited to approximately ~40 due sequence growth and space constraint
      * Ex: n=50 will result in java.lang.OutOfMemoryError: Java heap space
      * 
-     * @return: Will return the full sequence
+     * @return: Will return only the sequence of "nth" run/block
      */
-    public static List<Integer> kolakoskiSequence(int n) {
-        
+    public static List<Integer> kolakoskiSequenceNthRun(int n) {
+               
         LinkedList<Integer> list = new LinkedList<Integer>();
 
         try {
@@ -22,15 +22,16 @@ public class KolakoskiSequence {
                 throw new Exception("Input value must be greater than or equal to 1");
             }
 
-            if (n >= 1) { list.addLast(1); }
-            if (n >= 2) { list.addLast(2); }
-            if (n >= 3) { list.addLast(2); }
+            else if (n == 1) { 
+                list.addLast(1);
+            }
+            else if (n == 2 || n >= 3) {
+                list.addLast(2);
+            }
 
+            
             if (n > 3) {
-                LinkedList<Integer> block = new LinkedList<Integer>();
-                block.add(2);
-
-                list = kSequenceHelper(n, 4, list, block);
+                list = kSequenceHelper(n, 4, list);
             }
 
         } catch (Exception e) {
@@ -40,55 +41,51 @@ public class KolakoskiSequence {
         return list;
     }
 
-    private static LinkedList<Integer> kSequenceHelper(int n, int iter, LinkedList<Integer> list, LinkedList<Integer> block) {
+    private static LinkedList<Integer> kSequenceHelper(int n, int iter, LinkedList<Integer> block) {
         if (iter > n) {
-            return list;
+            return block;
         }
 
-        int nextDigit = list.peekLast() % 2 + 1;
+        int nextDigit = block.peekLast() % 2 + 1;
         LinkedList<Integer> newBlock = new LinkedList<Integer>();
         
         for (int i : block) {
 
             for (int j = 1; j <= i; j++) {
-                list.addLast(nextDigit);
                 newBlock.addLast(nextDigit);
             }
             
             nextDigit = nextDigit % 2 + 1;
         }
 
-        return kSequenceHelper(n, iter+1, list, newBlock);
+        return kSequenceHelper(n, iter+1, newBlock);
     }
 
     public static void main(String[] args) {
         List<Integer> list;
         
-        list = kolakoskiSequence(0);
+        list = kolakoskiSequenceNthRun(0);
         System.out.println(list.toString());
 
-        list = kolakoskiSequence(1);
+        list = kolakoskiSequenceNthRun(1);
         System.out.println(list.toString());
 
-        list = kolakoskiSequence(2);
+        list = kolakoskiSequenceNthRun(2);
         System.out.println(list.toString());
         
-        list = kolakoskiSequence(3);
+        list = kolakoskiSequenceNthRun(3);
         System.out.println(list.toString());
 
-        list = kolakoskiSequence(4);
+        list = kolakoskiSequenceNthRun(4);
         System.out.println(list.toString());
 
-        list = kolakoskiSequence(5);
+        list = kolakoskiSequenceNthRun(5);
         System.out.println(list.toString());
 
-        list = kolakoskiSequence(6);
+        list = kolakoskiSequenceNthRun(6);
         System.out.println(list.toString());
 
-        list = kolakoskiSequence(40);
+        list = kolakoskiSequenceNthRun(40);
         System.out.println(list.size());
-
-        // list = kolakoskiSequence(50);
-        // System.out.println(list.toString());
     }
 }
